@@ -21,7 +21,6 @@ public class Main {
         for (int i = 0; i < array.length; i++) {
             copyArray[i] = array[i];
         }
-
         return copyArray;
     }
 }
