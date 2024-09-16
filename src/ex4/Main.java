@@ -1,6 +1,7 @@
 package ex4;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,17 +9,19 @@ public class Main {
         Thing mobile = new Thing("Nokia 3210", 1);
         Thing brick = new Thing("Brick", 4);
 
-        Suitcase suitcase = new Suitcase(5);
-        System.out.println(suitcase);
+        Suitcase suitcase1 = new Suitcase(5);
+        suitcase1.addThing(book);
+        suitcase1.addThing(mobile);
 
-        suitcase.addThing(book);
-        System.out.println(suitcase);
+        Suitcase suitcase2 = new Suitcase(5);
+        suitcase2.addThing(brick);
 
-        suitcase.addThing(mobile);
-        System.out.println(suitcase);
+        Container container = new Container(10);
+        container.addSuitcase(suitcase1);
+        container.addSuitcase(suitcase2);
 
-        suitcase.addThing(brick);
-        System.out.println(suitcase);
+        // Only print the summary of suitcases in the container
+        System.out.println(container);
     }
 }
 
@@ -30,12 +33,15 @@ class Thing {
         this.name = name;
         this.weight = weight;
     }
+
     public String getName() {
         return this.name;
     }
+
     public int getWeight() {
         return this.weight;
     }
+
     public String toString() {
         return this.name + " (" + this.weight + " kg)";
     }
@@ -59,7 +65,7 @@ class Suitcase {
         }
     }
 
-    private int totalWeight() {
+    public int totalWeight() {
         int totalWeight = 0;
         for (Thing thing : this.things) {
             totalWeight += thing.getWeight();
@@ -82,4 +88,31 @@ class Suitcase {
     }
 }
 
+class Container {
+    private List<Suitcase> suitcases;
+    private int weightLimit;
 
+    public Container(int weightLimit) {
+        this.suitcases = new ArrayList<Suitcase>();
+        this.weightLimit = weightLimit;
+    }
+
+    public void addSuitcase(Suitcase suitcase) {
+        if (totalWeight() + suitcase.totalWeight() <= weightLimit) {
+            suitcases.add(suitcase);
+        }
+    }
+
+    public int totalWeight(){
+        int total = 0;
+        for (Suitcase suitcase : suitcases) {
+            total += suitcase.totalWeight();
+        }
+        return total;
+    }
+
+    @Override
+    public String toString() {
+        return suitcases.size() + " suitcases (" + totalWeight() + " kg)";
+    }
+}
